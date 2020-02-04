@@ -33,4 +33,9 @@ class CellTest < Minitest::Test
     assert_equal cell.empty?, false
   end
 
+  def test_it_has_not_been_fired_upon_to_start
+    cell = Cell.new("B4")
+    assert_equal cell.fired_upon?, false
+  end
+
 end
