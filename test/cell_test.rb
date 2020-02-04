@@ -47,9 +47,11 @@ class CellTest < Minitest::Test
     assert cell.fired_upon?
   end
 
-  def test_it_renders_empty
+  def test_it_renders_without_ship
     cell = Cell.new("B4")
     assert_equal ".", cell.render
+    cell.fire_upon
+    assert_equal "M", cell.render
   end
 
 end
