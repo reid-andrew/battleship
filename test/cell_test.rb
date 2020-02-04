@@ -9,4 +9,20 @@ class CellTest < Minitest::Test
     cell = Cell.new("B4")
     assert_instance_of Cell, cell
   end
+
+  def test_it_has_a_coordinate
+    cell = Cell.new("B4")
+    assert_equal cell.coordinate, "B4"
+  end
+
+  def test_it_has_a_ship
+    cell = Cell.new("B4")
+    assert_nil cell.ship
+  end
+
+  def test_it_initializes_empty
+    cell = Cell.new("B4")
+    assert cell.empty?
+  end
+
 end
