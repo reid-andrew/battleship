@@ -30,6 +30,7 @@ class CellTest < Minitest::Test
     cruiser = Ship.new("Cruiser", 3)
     cell.place_ship(cruiser)
     assert_equal cell.ship, cruiser
+    assert_equal cell.empty?, false
   end
 
 end
