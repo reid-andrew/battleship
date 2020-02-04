@@ -9,4 +9,8 @@ class Cell
     @empty = true
   end
 
+  def place_ship(ship)
+    @ship = ship
+  end
+
 end
