@@ -61,5 +61,7 @@ class BoardTest < Minitest::Test
     assert_equal true, board.valid_placement?(submarine, ["A1", "A2"])
     assert_equal true, board.valid_placement?(cruiser, ["B1", "C1", "D1"])
     assert_equal true, board.valid_placement?(submarine, ["C1", "D1"])
+    require 'pry'; binding.pry
   end
+
 end

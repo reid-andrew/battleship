@@ -15,9 +15,6 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    # ship.length == coordinates.length
-    # ("A".."D").each_cons(coord_letters.size).include?(coord_letters)
-    # (1..4).each_cons(coord_numbers.size).include?(coord_numbers)
     coord_letters = []
     coord_numbers = []
     coordinates.each do |coord|
@@ -34,12 +31,6 @@ class Board
     else
       false
     end
-
-
-
-
-
-
 
   end
 
