@@ -23,4 +23,18 @@ class Cell
     @fired_upon = true
   end
 
+  def render(render_on = false)
+    if @ship == nil
+      fired_upon? ? "M" : "."
+    elsif @ship.sunk?
+      "X"
+    else
+      if render_on
+        fired_upon? ? "H" : "S"
+      else
+        fired_upon? ? "H" : "."
+      end
+    end
+  end
+
 end

@@ -47,4 +47,9 @@ class CellTest < Minitest::Test
     assert cell.fired_upon?
   end
 
+  def test_it_renders_empty
+    cell = Cell.new("B4")
+    assert_equal ".", cell.render
+  end
+
 end
