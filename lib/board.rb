@@ -40,4 +40,44 @@ class Board
     end
   end
 
+  def render_row(letter)
+    my_cells = []
+    output = letter
+    @cells.each do |cell, object|
+      if cell.include?(letter)
+        my_cells << object
+      end
+    end
+    my_cells.each do |cell|
+      output = output + " " + cell.render
+    end
+    output
+  end
+
+  def render_row_render_on(letter)
+    my_cells = []
+    output = letter
+    @cells.each do |cell, object|
+      if cell.include?(letter)
+        my_cells << object
+      end
+    end
+    my_cells.each do |cell|
+      output = output + " " + cell.render(true)
+    end
+    output
+  end
+
+  def render_board(on = false)
+    board_string = ""
+    ("A".."D").each do |letter|
+      if on == false
+        board_string = board_string + render_row(letter) + "\n"
+      else
+        board_string = board_string + render_row_render_on(letter) + "\n"
+      end
+    end
+    print board_string
+  end
+
 end
