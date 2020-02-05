@@ -62,4 +62,23 @@ class BoardTest < Minitest::Test
     assert_equal true, board.valid_placement?(cruiser, ["B1", "C1", "D1"])
     assert_equal true, board.valid_placement?(submarine, ["C1", "D1"])
   end
+
+  def test_it_can_place_ship
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    board.place(cruiser, ["A1", "A2", "A3"])
+    assert_equal board.cells["A1"].ship, cruiser
+    assert_equal board.cells["A2"].ship, cruiser
+    assert_equal board.cells["A3"].ship, cruiser
+    assert_nil board.cells["A4"].ship
+  end
+
+  def test_only_one_ship_per_cell
+    board = Board.new
+    cruiser = Ship.new("Cruiser", 3)
+    board.place(cruiser, ["A1", "A2", "A3"])
+    submarine = Ship.new("Submarine", 2)
+    assert_equal false, board.valid_placement?(submarine, ["A1", "B1"])
+  end
+
 end

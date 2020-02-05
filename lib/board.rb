@@ -15,9 +15,6 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    # ship.length == coordinates.length
-    # ("A".."D").each_cons(coord_letters.size).include?(coord_letters)
-    # (1..4).each_cons(coord_numbers.size).include?(coord_numbers)
     coord_letters = []
     coord_numbers = []
     coordinates.each do |coord|
@@ -25,7 +22,7 @@ class Board
       coord_numbers << @cells[coord].coordinate[1..-1].to_i
     end
 
-    if ship.length != coordinates.length
+    if ship.length != coordinates.length || (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
       false
     elsif ("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1
       true
@@ -35,12 +32,12 @@ class Board
       false
     end
 
+  end
 
-
-
-
-
-
+  def place(ship, coordinates)
+    if valid_placement?(ship, coordinates)
+      coordinates.each { |coordinate| @cells[coordinate].place_ship(ship)}
+    end
   end
 
 end

@@ -1,6 +1,6 @@
 class Cell
 
-  attr_reader :coordinate, :ship, :empty, :fired_upon, :ordinal, :numeric
+  attr_reader :coordinate, :ship, :empty, :fired_upon
   alias_method :empty?, :empty
   alias_method :fired_upon?, :fired_upon
 
@@ -9,8 +9,6 @@ class Cell
     @ship = nil
     @empty = true
     @fired_upon = false
-    @ordinal = @coordinate[0].ord
-    @numeric = @coordinate[-1].to_i
   end
 
   def place_ship(ship)
