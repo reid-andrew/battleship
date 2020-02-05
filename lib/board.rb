@@ -22,7 +22,7 @@ class Board
       coord_numbers << @cells[coord].coordinate[1..-1].to_i
     end
 
-    if ship.length != coordinates.length
+    if ship.length != coordinates.length || (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
       false
     elsif ("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1
       true
