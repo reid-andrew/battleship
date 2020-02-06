@@ -40,6 +40,12 @@ class Board
     end
   end
 
+  def render_top(size = 4)
+      print " "
+      size.times {|i| print " #{i+1}"}
+      puts
+  end
+
   def render_row(letter)
     my_cells = []
     output = letter
@@ -69,6 +75,7 @@ class Board
   end
 
   def render_board(on = false)
+    render_top
     board_string = ""
     ("A".."D").each do |letter|
       if on == false
