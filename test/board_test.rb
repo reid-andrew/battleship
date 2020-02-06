@@ -91,7 +91,6 @@ class BoardTest < Minitest::Test
     board.cells["C3"].fire_upon
     board.cells["D3"].fire_upon
     board.cells["D4"].fire_upon
-    require 'pry'; binding.pry
     assert_equal ".", board.cells["A4"].render
     assert_equal "H", board.cells["A2"].render
     assert_equal "X", board.cells["D3"].render
