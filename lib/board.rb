@@ -37,6 +37,8 @@ class Board
   def place(ship, coordinates)
     if valid_placement?(ship, coordinates)
       coordinates.each { |coordinate| @cells[coordinate].place_ship(ship)}
+    else #Andy added this else/false in - block used to end here to make the runner work.
+      false
     end
   end
 
@@ -66,8 +68,12 @@ class Board
     ("A".."D").each do |letter|
       board_string = board_string + render_row(letter, render_on) + " \n"
     end
-    print board_string
+    # print board_string
     board_string
+  end
+
+  def cells_available_to_fire_upon(coordinate)
+    @cells.map {|cell| cell.fired_upon == false}.include?(coordinate)
   end
 
 end

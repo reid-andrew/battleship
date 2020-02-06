@@ -37,4 +37,10 @@ class Cell
     end
   end
 
+  def render_readable
+    return "hit." if render == "H"
+    return "miss." if render == "M"
+    return "hit and sink." if render == "X"
+  end
+
 end
