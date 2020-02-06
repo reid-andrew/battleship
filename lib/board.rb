@@ -66,7 +66,7 @@ class Board
     ("A".."D").each do |letter|
       board_string = board_string + render_row(letter, render_on) + " \n"
     end
-    print board_string
+    # print board_string
     board_string
   end
 
