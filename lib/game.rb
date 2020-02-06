@@ -30,12 +30,22 @@ class Game
     @player_board = Board.new
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
+    # Code to place computer ships here
+    place_player_ships
+  end
+
+  def place_player_ships
     print "My ships are laid out on the grid. What's taking you so long to lay out yours?" + "\n"
     print "The Cruiser is 3 units long and the Submarine is 2 units long." + "\n"
     print @player_board.render + "\n"
-    @player_board.place(@player_cruiser, player_ship_input("Cruiser"))
-    @player_board.place(@player_sub, player_ship_input("Submarine"))
-    # require "pry"; binding.pry
+    while @player_board.place(@player_cruiser, player_ship_input("Cruiser")) == false
+      print "That's an invalid entry" + "\n"
+      @player_board.place(@player_cruiser, player_ship_input("Cruiser"))
+    end
+    while @player_board.place(@player_sub, player_ship_input("Submarine")) == false
+      print "That's an invalid entry" + "\n"
+      @player_board.place(@player_sub, player_ship_input("Submarine"))
+    end
     print @player_board.render(true)
   end
 

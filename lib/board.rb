@@ -37,6 +37,8 @@ class Board
   def place(ship, coordinates)
     if valid_placement?(ship, coordinates)
       coordinates.each { |coordinate| @cells[coordinate].place_ship(ship)}
+    else #Andy added this else/false in - block used to end here to make the runner work.
+      false
     end
   end
 
