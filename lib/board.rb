@@ -41,9 +41,10 @@ class Board
   end
 
   def render_top(size = 4)
-      print " "
-      size.times {|i| print " #{i+1}"}
-      puts
+    render_output = " "
+    size.times { |i| render_output += " " + (i + 1).to_s }
+    render_output += " \n"
+    render_output
   end
 
   def render_row(letter, render_on = false)
@@ -60,13 +61,13 @@ class Board
     output
   end
 
-  def render_board(render_on = false)
-    render_top
-    board_string = ""
+  def render(render_on = false)
+    board_string = render_top
     ("A".."D").each do |letter|
-      board_string = board_string + render_row(letter, render_on) + "\n"
+      board_string = board_string + render_row(letter, render_on) + " \n"
     end
     print board_string
+    board_string
   end
 
 end
