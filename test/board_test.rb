@@ -83,6 +83,10 @@ class BoardTest < Minitest::Test
 
   def test_it_renders
     board = Board.new
+
+    board1 = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
+    assert_equal board1, board.render
+
     cruiser = Ship.new("Cruiser", 3)
     board.place(cruiser, ["A1", "A2", "A3"])
     submarine = Ship.new("Submarine", 2)
@@ -91,12 +95,11 @@ class BoardTest < Minitest::Test
     board.cells["C3"].fire_upon
     board.cells["D3"].fire_upon
     board.cells["D4"].fire_upon
-    assert_equal ".", board.cells["A4"].render
-    assert_equal "H", board.cells["A2"].render
-    assert_equal "X", board.cells["D3"].render
-    assert_equal "M", board.cells["D4"].render
-    assert_equal ".", board.cells["A1"].render
-    assert_equal "S", board.cells["A1"].render(true)
+
+    board2 = "  1 2 3 4 \nA . H . . \nB . . . . \nC . . X . \nD . . X M \n"
+    board3 = "  1 2 3 4 \nA S H S . \nB . . . . \nC . . X . \nD . . X M \n"
+    assert_equal board2, board.render
+    assert_equal board3, board.render(true)
   end
 
 end
