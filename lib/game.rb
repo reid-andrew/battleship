@@ -58,15 +58,11 @@ class Game
     print "On which coordinate would you like to fire?" + "\n"
     print "> "
     input_coordinate = player_coordinate_input(gets.chomp)
-
     @computer_board.cells[input_coordinate].fire_upon
-    if winner_winner_chicken_dinner != "Game continues"
-      print winner_winner_chicken_dinner + "\n"
-      return
-    end
-
     @player_board.cells[input_coordinate].fire_upon
-    winner_winner_chicken_dinner == "Game continues" ? turns : winner_winner_chicken_dinner + "\n"
+    print "\n" + "Your shot on #{input_coordinate} was a #{@computer_board.cells[input_coordinate].render_readable}" + "\n"
+    print "My shot on #{input_coordinate} was a #{@player_board.cells[input_coordinate].render_readable}" + "\n" + "\n"
+    winner == "Game continues" ? turns : winner
   end
 
   def player_ship_input(ship_type)
@@ -87,7 +83,7 @@ class Game
   def player_coordinate_input(coordinate)
     if coordinate == "please"
       return
-    elsif !@player_board.valid_coordinate?(coordinate)
+    elsif !@player_board.valid_coordinate?(coordinate) 
       print "That's not a valid coordinate. Please try again."
       print "> "
       player_coordinate_input(gets.chomp)
@@ -96,14 +92,13 @@ class Game
     end
   end
 
-  def winner_winner_chicken_dinner
+  def winner
     if @player_cruiser.sunk && @player_sub.sunk
-      print "I win! You sunk!"
+      puts "I win!" + "\n"
     elsif @computer_cruiser.sunk && @computer_sub.sunk
-      print "You win! I sunk!"
+      puts "You win!" + "\n"
     else
       "Game continues"
     end
   end
-  
 end

@@ -72,4 +72,8 @@ class Board
     board_string
   end
 
+  def cells_available_to_fire_upon(coordinate)
+    @cells.map {|cell| cell.fired_upon == false}.include?(coordinate)
+  end
+
 end
