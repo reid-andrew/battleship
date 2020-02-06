@@ -42,8 +42,8 @@ class Board
 
   def render_top(size = 4)
       print " "
-      size.times {|i| print " #{i+1}"}
-      puts
+      size.times {|i|  " #{i+1}"}
+      # puts
   end
 
   def render_row(letter, render_on = false)
@@ -67,6 +67,7 @@ class Board
       board_string = board_string + render_row(letter, render_on) + "\n"
     end
     print board_string
+    board_string
   end
 
 end
