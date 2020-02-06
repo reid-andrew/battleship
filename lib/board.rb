@@ -40,4 +40,33 @@ class Board
     end
   end
 
+  def render_top(size = 4)
+      print " "
+      size.times {|i| print " #{i+1}"}
+      puts
+  end
+
+  def render_row(letter, render_on = false)
+    my_cells = []
+    output = letter
+    @cells.each do |cell, object|
+      if cell.include?(letter)
+        my_cells << object
+      end
+    end
+    my_cells.each do |cell|
+      output = output + " " + cell.render(render_on)
+    end
+    output
+  end
+
+  def render_board(render_on = false)
+    render_top
+    board_string = ""
+    ("A".."D").each do |letter|
+      board_string = board_string + render_row(letter, render_on) + "\n"
+    end
+    print board_string
+  end
+
 end
