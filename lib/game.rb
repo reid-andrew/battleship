@@ -1,17 +1,20 @@
 class Game
 
   def greeting
+    print "\e[2J\e[f"
     print "\n" + "Welcome to BATTLESHIP" + "\n" +
-    "Enter p to play. Enter q to quit." + "\n" + "> "
+    "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
   end
 
   def start(input)
     if input == "p"
+      print "\e[2J\e[f"
       game_initiation
     elsif input == "q"
       print "\n" + "Sea you later!!!" + "\n" + "\n" + "\n"
     else
-      print "\n" + "Invalid response. Enter 'p' or 'q'." + "\n" + "> "
+      print "\e[2J\e[f"
+      print "\n" + "Invalid response. Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
       start(gets.chomp)
     end
   end
@@ -43,6 +46,7 @@ class Game
   end
 
   def turns
+    print "\e[2J\e[f"
     print "Computer Board"
     print @computer_board.render + "\n"
     print "Player Board"
@@ -50,7 +54,7 @@ class Game
 
     print "On which coordinate would you like to fire?" + "\n"
     print "> "
-    input_coordinate = player_coordinate_input(gets.chomp)
+    input_coordinate = player_coordinate_input(gets.chomp.capitalize)
     @computer_board.cells[input_coordinate].fire_upon
     @player_board.cells[input_coordinate].fire_upon
     print "\n" + "Your shot on #{input_coordinate} was a #{@computer_board.cells[input_coordinate].render_readable}" + "\n"
@@ -74,7 +78,7 @@ class Game
 
   def player_coordinate_input(coordinate)
     if coordinate == "please"
-      return
+      abort("We're going down, Captain")
     elsif !@player_board.valid_coordinate?(coordinate)
       print "That's not a valid coordinate. Please try again."
       print "> "
