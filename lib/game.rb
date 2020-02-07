@@ -1,9 +1,13 @@
 class Game
 
-  def greeting
-    print "\e[2J\e[f"
-    print "\n" + "Welcome to BATTLESHIP" + "\n" +
-    "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
+  def greeting(clear_screen = true)
+    if clear_screen
+      print "\e[2J\e[f"
+      print "\n" + "Welcome to BATTLESHIP" + "\n"
+    else
+      print "\n" + "Ready for another game of BATTLESHIP?" + "\n" + "\n"
+    end
+    print "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
   end
 
   def start(input)
@@ -45,8 +49,11 @@ class Game
     turns
   end
 
-  def turns
+  def turns(prior_result = nil)
     print "\e[2J\e[f"
+    if prior_result
+      print prior_result
+    end
     print "Computer Board"
     print @computer_board.render + "\n"
     print "Player Board"
@@ -57,9 +64,9 @@ class Game
     input_coordinate = player_coordinate_input(gets.chomp.capitalize)
     @computer_board.cells[input_coordinate].fire_upon
     @player_board.cells[input_coordinate].fire_upon
-    print "\n" + "Your shot on #{input_coordinate} was a #{@computer_board.cells[input_coordinate].render_readable}" + "\n"
-    print "My shot on #{input_coordinate} was a #{@player_board.cells[input_coordinate].render_readable}" + "\n" + "\n"
-    winner == "Game continues" ? turns : winner
+    turn_result = "\n" + "Your shot on #{input_coordinate} was a #{@computer_board.cells[input_coordinate].render_readable}" +
+    "\n" + "My shot on #{input_coordinate} was a #{@player_board.cells[input_coordinate].render_readable}" + "\n" + "\n"
+    winner == "Game continues" ? turns(turn_result) : winner
   end
 
   def player_ship_input(ship_type)
@@ -77,11 +84,10 @@ class Game
   end
 
   def player_coordinate_input(coordinate)
-    if coordinate == "please"
+    if coordinate == "!!!"
       abort("We're going down, Captain")
     elsif !@player_board.valid_coordinate?(coordinate)
-      print "That's not a valid coordinate. Please try again."
-      print "> "
+      print "That's not a valid coordinate. Please try again." + "> "
       player_coordinate_input(gets.chomp)
     else
       coordinate
@@ -90,9 +96,15 @@ class Game
 
   def winner
     if @player_cruiser.sunk && @player_sub.sunk
-      puts "I win!" + "\n"
+      print "\e[2J\e[f"
+      print "I win!" + "\n"
+      greeting(false)
+      start(gets.chomp)
     elsif @computer_cruiser.sunk && @computer_sub.sunk
+      print "\e[2J\e[f"
       puts "You win!" + "\n"
+      greeting(false)
+      start(gets.chomp)
     else
       "Game continues"
     end
