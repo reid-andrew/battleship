@@ -33,13 +33,19 @@ class Game
     @player_board = Board.new
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
-    # Code to place computer ships here
+    place_computer_ships
     place_player_ships
   end
 
-  def place_player_ships
+  def place_computer_ships
+    # **********************************
+    # Code to place computer ships here
+    # **********************************
     print "\n" + "My ships are laid out on the grid. Now it's time to place yours." + "\n" + "\n"
     print "The Cruiser is 3 units long and the Submarine is 2 units long." + "\n" + "\n"
+  end
+
+  def place_player_ships
     print @player_board.render + "\n"
     player_ship_placement(@player_board, @player_cruiser, "Cruiser")
     player_ship_placement(@player_board, @player_sub, "Submarine")
@@ -83,22 +89,25 @@ class Game
 
   def turns(prior_result = nil)
     print "\e[2J\e[f"
-    print "Computer Board" + "\n"
-    print @computer_board.render + "\n"
-    print "Player Board" + "\n"
-    print @player_board.render(true) + "\n"
+    print "Computer Board" + "\n" + @computer_board.render + "\n"
+    print "Player Board" + "\n" + @player_board.render(true) + "\n"
     if prior_result
       print prior_result
     end
-
-    print "On which coordinate would you like to fire?" + "\n"
-    print "> "
+    print "On which coordinate would you like to fire?" + "\n" + "> "
     input_coordinate = player_coordinate_input(gets.chomp.capitalize)
     @computer_board.cells[input_coordinate].fire_upon
     @player_board.cells[input_coordinate].fire_upon
-    turn_result = "\n" + "Your shot on #{input_coordinate} was a #{@computer_board.cells[input_coordinate].render_readable}" +
-    "\n" + "My shot on #{input_coordinate} was a #{@player_board.cells[input_coordinate].render_readable}" + "\n" + "\n"
+
+    player_result = turn_results(input_coordinate, @computer_board)
+    computer_result = turn_results(input_coordinate, @computer_board, false)
+    turn_result = player_result + computer_result + "\n" + "\n"
     winner == :game_continues ? turns(turn_result) : winner
+  end
+
+  def turn_results(coord, board, human = true)
+    who = human ? "Your" : "My"
+    "\n" + "#{who} shot on #{coord} was a #{board.cells[coord].render_readable}"
   end
 
   def winner
