@@ -94,12 +94,18 @@ class Game
   # Method used by player to both place & fire upon ships. Calls itself again if
   # invalid input provided.
   # One exception to above is built in the ability to exit game early with '!!!'
-  def player_coordinate_input(coordinate)
+  def player_coordinate_input(coordinate, shot = false)
+    # if shot
+    #   require "pry"; binding.pry
+    # end
     if coordinate == "!!!"
       abort("\n" + "Don't give up the ship, Captain!!!" + "\n" + "\n"+ "\n")
-    elsif !@player_board.valid_coordinate?(coordinate)
+    elsif !@ai_board.valid_coordinate?(coordinate)
       print "That's not a valid coordinate. Please try again." + "> "
-      player_coordinate_input(gets.chomp.capitalize)
+      player_coordinate_input(gets.chomp.capitalize, shot)
+    elsif shot && @ai_board.cells_available_to_fire_upon(coordinate)
+      print "You already fired upon that coordinate. Please pick another." + "> "
+      player_coordinate_input(gets.chomp.capitalize, shot)
     else
       coordinate
     end
@@ -116,7 +122,7 @@ class Game
       print prior_result
     end
     print "On which coordinate would you like to fire?" + "\n" + "> "
-    input_coordinate = player_coordinate_input(gets.chomp.capitalize)
+    input_coordinate = player_coordinate_input(gets.chomp.capitalize, true)
     @ai_board.cells[input_coordinate].fire_upon
     @player_board.cells[input_coordinate].fire_upon
 

@@ -73,7 +73,8 @@ class Board
   end
 
   def cells_available_to_fire_upon(coordinate)
-    @cells.map {|cell| cell.fired_upon == false}.include?(coordinate)
+    fired_upon = @cells.select {|coord, cell| cell.fired_upon == true}
+    fired_upon.any? {|coord, cell| coord == coordinate}
   end
 
 end
