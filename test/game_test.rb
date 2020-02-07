@@ -16,6 +16,7 @@ class CellTest < Minitest::Test
     @player_board = Board.new
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
+    require "pry"; binding.pry
   end
 
   def test_it_exists
@@ -29,6 +30,5 @@ class CellTest < Minitest::Test
     assert_instance_of Ship, @computer_sub
     assert_instance_of Ship, @player_cruiser
     assert_instance_of Ship, @player_sub
-
   end
 end
