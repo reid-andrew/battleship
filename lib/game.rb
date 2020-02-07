@@ -1,24 +1,17 @@
 class Game
 
   def greeting
-    puts
-    print "Welcome to BATTLESHIP" + "\n" +
-    "Enter p to play. Enter q to quit." + "\n" +
-    "> "
+    print "\n" + "Welcome to BATTLESHIP" + "\n" +
+    "Enter p to play. Enter q to quit." + "\n" + "> "
   end
 
   def start(input)
     if input == "p"
       game_initiation
     elsif input == "q"
-      puts
-      puts "Sea you later!!!"
-      puts
-      puts
+      print "\n" + "Sea you later!!!" + "\n" + "\n" + "\n"
     else
-      puts
-      puts "Invalid response. Enter 'p' or 'q'."
-      print "> "
+      print "\n" + "Invalid response. Enter 'p' or 'q'." + "\n" + "> "
       start(gets.chomp)
     end
   end
@@ -35,8 +28,8 @@ class Game
   end
 
   def place_player_ships
-    print "My ships are laid out on the grid. What's taking you so long to lay out yours?" + "\n"
-    print "The Cruiser is 3 units long and the Submarine is 2 units long." + "\n"
+    print "\n" + "My ships are laid out on the grid. Now it's time to place yours." + "\n" + "\n"
+    print "The Cruiser is 3 units long and the Submarine is 2 units long." + "\n" + "\n"
     print @player_board.render + "\n"
     while @player_board.place(@player_cruiser, player_ship_input("Cruiser")) == false
       print "That's an invalid entry" + "\n"
@@ -67,23 +60,22 @@ class Game
 
   def player_ship_input(ship_type)
     counter = 0
-    max_loop = 0
+    max_loop = 2
+    max_loop += 1 if ship_type == "Cruiser"
     player_inputs = []
-    ship_type == "Cruiser" ? max_loop = 3 : max_loop = 2
     while counter < max_loop do
-      print "Enter square #{counter + 1} for the #{ship_type}:"
-      print "> "
-      input = player_coordinate_input(gets.chomp)
+      print "Enter square #{counter + 1} for the #{ship_type}:" + "\n" + "> "
+      input = player_coordinate_input(gets.chomp.capitalize)
       player_inputs << input
       counter += 1
     end
-    player_inputs
+    player_inputs.sort
   end
 
   def player_coordinate_input(coordinate)
     if coordinate == "please"
       return
-    elsif !@player_board.valid_coordinate?(coordinate) 
+    elsif !@player_board.valid_coordinate?(coordinate)
       print "That's not a valid coordinate. Please try again."
       print "> "
       player_coordinate_input(gets.chomp)
