@@ -9,7 +9,7 @@ class Game
   end
 
   def greeting_text(clear_screen)
-    new = "\e[2J\e[f" + "\n" + "Welcome to BATTLESHIP" + "\n"
+    new = clear_output + "\n" + "Welcome to BATTLESHIP" + "\n"
     repeat = "\n" + "Ready for another game of BATTLESHIP?" + "\n" + "\n"
 
     start = clear_screen ? new : repeat
@@ -18,12 +18,13 @@ class Game
 
   def start(input)
     if input == "p"
-      print "\e[2J\e[f"
+      print clear_output
       game_initiation
     elsif input == "q"
-      print "\e[2J\e[f"+ "\n" + "Sea you later!!!" + "\n" + "\n" + "\n"
+      print clear_output
+      print "Sea you later!!!" + "\n" + "\n" + "\n"
     else
-      print "\e[2J\e[f" + "\n" + "Invalid response.
+      print clear_output + "\n" + "Invalid response.
       Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
       start(gets.chomp.downcase)
     end
@@ -102,7 +103,7 @@ class Game
   end
 
   def turns(prior_result = nil)
-    print "\e[2J\e[f"
+    print clear_output
     print print_boards
     if prior_result
       print prior_result
@@ -125,9 +126,13 @@ class Game
 
   def winner
     if @player_cruiser.sunk && @player_sub.sunk
-      print_winner(false)
+      print print_winner(false)
+      greeting(false)
+      start(gets.chomp.downcase)
     elsif @ai_cruiser.sunk && @ai_sub.sunk
-      print_winner
+      print print_winner
+      greeting(false)
+      start(gets.chomp.downcase)
     else
       :game_continues
     end
@@ -135,11 +140,9 @@ class Game
 
   def print_winner(human = true)
     who = human ? "You" : "I"
-    print "\e[2J\e[f"
+    print clear_output
     print print_boards(true)
-    print "\n" + "#{who} win!" + "\n"
-    greeting(false)
-    start(gets.chomp.downcase)
+    "\n" + "#{who} win!" + "\n"
   end
 
   def print_boards(render_both = false)
@@ -147,5 +150,9 @@ class Game
     "\n" + @ai_board.render(render_both) + "\n" +
     "==============Player Board==============" + "\n" +
     @player_board.render(true) + "\n"
+  end
+
+  def clear_output
+    "\e[2J\e[f"
   end
 end

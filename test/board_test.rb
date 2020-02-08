@@ -33,6 +33,9 @@ class BoardTest < Minitest::Test
   def test_it_validates_ship_length
     assert_equal true, @board.incorrect_ship_length(@cruiser, ["A1", "A2"])
     assert_equal true, @board.incorrect_ship_length(@submarine, ["A2", "A3", "A4"])
+
+    assert_equal false, @board.incorrect_ship_length(@cruiser, ["A1", "A2", "A3"])
+    assert_equal false, @board.incorrect_ship_length(@submarine, ["A3", "A4"])
   end
 
   def test_it_validates_consecutive_coordinates
@@ -40,6 +43,9 @@ class BoardTest < Minitest::Test
     assert_equal false, @board.consecutive_coordinates_chosen(@submarine, ["A1", "C1"])
     assert_equal false, @board.consecutive_coordinates_chosen(@cruiser, ["A3", "A2", "A1"])
     assert_equal false, @board.consecutive_coordinates_chosen(@submarine, ["C1", "B1"])
+
+    assert_equal true, @board.consecutive_coordinates_chosen(@cruiser, ["A1", "A2", "A3"])
+    assert_equal true, @board.consecutive_coordinates_chosen(@submarine, ["C1", "D1"])
   end
 
   def test_it_validates_diagonal_coordinates
