@@ -64,7 +64,25 @@ class CellTest < Minitest::Test
 
     @cruiser.hit
     @cruiser.hit
-    
+
     assert_equal "X", @cell.render
+  end
+
+  def test_it_renders_readable_with_ship
+    @cell.place_ship(@cruiser)
+    @cell.fire_upon
+
+    assert_equal "hit.", @cell.render_readable
+
+    @cruiser.hit
+    @cruiser.hit
+
+    assert_equal "hit and sink.", @cell.render_readable
+
+    cell2 = Cell.new("C4")
+    cell2.fire_upon
+
+    assert_equal "miss.", cell2.render_readable
+
   end
 end
