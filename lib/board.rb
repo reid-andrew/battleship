@@ -17,20 +17,25 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    coord_letters, coord_numbers = [], []
-    coordinates.each do |coord|
-      coord_letters << @cells[coord].coordinate[0]
-      coord_numbers << @cells[coord].coordinate[1..-1].to_i
-    end
     return false if incorrect_ship_length(ship, coordinates)
-    return true if ("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1
-    return true if (1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1
+    return true if consecutive_coordinates_chosen(ship, coordinates)
     return false
   end
 
   def incorrect_ship_length(ship, coordinates)
     ship.length != coordinates.length ||
     (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
+  end
+
+  def consecutive_coordinates_chosen(ship, coordinates)
+    coord_letters, coord_numbers = [], []
+    coordinates.each do |coord|
+      coord_letters << @cells[coord].coordinate[0]
+      coord_numbers << @cells[coord].coordinate[1..-1].to_i
+    end
+
+    (("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1) ||
+    ((1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1)
   end
 
   def place(ship, coordinates)

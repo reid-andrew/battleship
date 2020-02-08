@@ -33,21 +33,18 @@ class BoardTest < Minitest::Test
   def test_it_validates_ship_length
     assert_equal true, @board.incorrect_ship_length(@cruiser, ["A1", "A2"])
     assert_equal true, @board.incorrect_ship_length(@submarine, ["A2", "A3", "A4"])
-
-    assert_equal false, @board.valid_placement?(@cruiser, ["A1", "A2"])
-    assert_equal false, @board.valid_placement?(@submarine, ["A2", "A3", "A4"])
   end
 
   def test_it_validates_consecutive_coordinates
-    assert_equal false, @board.valid_placement?(@cruiser, ["A1", "A2", "A4"])
-    assert_equal false, @board.valid_placement?(@submarine, ["A1", "C1"])
-    assert_equal false, @board.valid_placement?(@cruiser, ["A3", "A2", "A1"])
-    assert_equal false, @board.valid_placement?(@submarine, ["C1", "B1"])
+    assert_equal false, @board.consecutive_coordinates_chosen(@cruiser, ["A1", "A2", "A4"])
+    assert_equal false, @board.consecutive_coordinates_chosen(@submarine, ["A1", "C1"])
+    assert_equal false, @board.consecutive_coordinates_chosen(@cruiser, ["A3", "A2", "A1"])
+    assert_equal false, @board.consecutive_coordinates_chosen(@submarine, ["C1", "B1"])
   end
 
   def test_it_validates_diagonal_coordinates
-    assert_equal false, @board.valid_placement?(@cruiser, ["A1", "B2", "C3"])
-    assert_equal false, @board.valid_placement?(@submarine, ["C2", "D3"])
+    assert_equal false, @board.consecutive_coordinates_chosen(@cruiser, ["A1", "B2", "C3"])
+    assert_equal false, @board.consecutive_coordinates_chosen(@submarine, ["C2", "D3"])
   end
 
   def test_it_validates_correct_placement
