@@ -2,7 +2,7 @@ require './lib/board'
 require './lib/ship'
 
 class Game
-  attr_reader :ai_board, :ai_sub
+  attr_reader :ai_board, :ai_sub, :player_board, :player_sub
 
   def greeting(clear_screen = true)
     print greeting_text(clear_screen)
@@ -48,7 +48,11 @@ class Game
   def place_ai_ships
     @ai_board.place_random(@ai_sub)
     @ai_board.place_random(@ai_cruiser)
-    print "\n" + "My ships are laid out on the grid. Now it's time to place
+    print ai_ship_placement_message
+  end
+
+  def ai_ship_placement_message
+    "\n" + "My ships are laid out on the grid. Now it's time to place
     yours." + "\n" + "\n" + "The Cruiser is 3 units long and the Submarine is
     2 units long." + "\n" + "\n"
   end
@@ -71,10 +75,9 @@ class Game
   end
 
   def player_ship_input(ship_type)
-    counter = 0
-    max_loop = 2
-    max_loop += 1 if ship_type == "Cruiser"
     player_inputs = []
+    counter = 0
+    ship_type == "Cruiser" ? max_loop = 3 : max_loop = 2
     while counter < max_loop do
       print "Enter square #{counter + 1} for the #{ship_type}:" + "\n" + "> "
       input = player_coordinate_input(gets.chomp.capitalize)
@@ -129,20 +132,20 @@ class Game
       :game_continues
     end
   end
-end
 
-def print_winner(human = true)
-  who = human ? "You" : "I"
-  print "\e[2J\e[f"
-  print print_boards(true)
-  print "\n" + "#{who} win!" + "\n"
-  greeting(false)
-  start(gets.chomp.downcase)
-end
+  def print_winner(human = true)
+    who = human ? "You" : "I"
+    print "\e[2J\e[f"
+    print print_boards(true)
+    print "\n" + "#{who} win!" + "\n"
+    greeting(false)
+    start(gets.chomp.downcase)
+  end
 
-def print_boards(render_both = false)
-  "=============Computer Board=============" +
-  "\n" + @ai_board.render(render_both) + "\n" +
-  "==============Player Board==============" + "\n" +
-  @player_board.render(true) + "\n"
+  def print_boards(render_both = false)
+    "=============Computer Board=============" +
+    "\n" + @ai_board.render(render_both) + "\n" +
+    "==============Player Board==============" + "\n" +
+    @player_board.render(true) + "\n"
+  end
 end

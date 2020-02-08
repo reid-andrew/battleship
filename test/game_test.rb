@@ -30,4 +30,18 @@ class CellTest < Minitest::Test
     assert_equal repeat, @game.greeting_text(false)
   end
 
+  def test_turn_results_are_provided
+    @game.create_game_elements
+    @game.ai_board.cells["A1"].fire_upon
+    expected1 = "\n" + "Your shot on A1 was a miss."
+
+    assert_equal expected1, @game.turn_results("A1", @game.ai_board, true)
+
+    @game.player_board.place(@game.player_sub, ["A2", "A3"])
+    @game.player_board.cells["A2"].fire_upon
+    expected2 = "\n" + "My shot on A2 was a hit."
+
+    assert_equal expected2, @game.turn_results("A2", @game.player_board, false)
+  end
+
 end
