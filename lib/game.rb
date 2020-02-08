@@ -110,6 +110,25 @@ class Game
     end
   end
 
+  def hit_ship?(board)
+    has_ship = board.cells.keys.keep_if { |cell| !board.cells[cell].empty? }
+    has_ship.find_all do |cell|
+      board.cells[cell].fired_upon &&
+      !board.cells[cell].ship.sunk?
+    end
+  end
+
+  def ai_take_shot(board)
+    valid = board.cells.keys.reject { |key| board.cells[key].fired_upon? }
+    hit_ship?(board).empty? ? valid.sample : ai_take_aim(board)
+    valid.sample
+  end
+
+  def ai_take_aim(board)
+    # hit_ship?(board) == [whatever cells are hit but not sunk]
+
+  end
+
   # Main class player interacts with each turn. Prints results of previous turn.
   # Collects input from player for new turn.
   # Calls itself again at end of each turn unless a winner has been declared.
@@ -123,6 +142,7 @@ class Game
     print "On which coordinate would you like to fire?" + "\n" + "> "
     input_coordinate = player_coordinate_input(gets.chomp.capitalize, true)
     @ai_board.cells[input_coordinate].fire_upon
+    ai_take_shot(@player_board)
     @player_board.cells[input_coordinate].fire_upon
 
     player_result = turn_results(input_coordinate, @ai_board)
