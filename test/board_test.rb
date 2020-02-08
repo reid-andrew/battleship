@@ -66,6 +66,8 @@ class BoardTest < Minitest::Test
     assert_equal @board.cells["A1"].ship, @cruiser
     assert_equal @board.cells["A2"].ship, @cruiser
     assert_equal @board.cells["A3"].ship, @cruiser
+    assert @board.cells["A3"].ship == @board.cells["A1"].ship
+    assert @board.cells["A3"].ship == @board.cells["A2"].ship
     assert_nil @board.cells["A4"].ship
   end
 
