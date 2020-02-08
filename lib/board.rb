@@ -44,10 +44,10 @@ class Board
     end
   end
 
-  def place_random(board, ship)
+  def place_random(ship)
     empties, rowcells, columncells, valids = [], [], [], []
 
-    empties = board.cells.keys.select { |key| board.cells[key].empty? }
+    empties = @cells.keys.select { |key| @cells[key].empty? }
     genesis = empties.sample
 
     empties.each { |cell| rowcells << cell if cell[0] == genesis[0] }
@@ -58,7 +58,7 @@ class Board
 
     valids.empty? ? place_random(ship, length) : coordinates = valids.sample
 
-    board.place(ship, coordinates)
+    place(ship, coordinates)
   end
 
   def render_top(size = 4)

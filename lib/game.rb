@@ -43,8 +43,8 @@ class Game
   end
 
   def place_ai_ships
-    @ai_board.place_random(@ai_board, @ai_sub)
-    @ai_board.place_random(@ai_board, @ai_cruiser)
+    @ai_board.place_random(@ai_sub)
+    @ai_board.place_random(@ai_cruiser)
     print "\n" + "My ships are laid out on the grid. Now it's time to place
     yours." + "\n" + "\n" + "The Cruiser is 3 units long and the Submarine is
     2 units long." + "\n" + "\n"
@@ -98,9 +98,6 @@ class Game
   def turns(prior_result = nil)
     print "\e[2J\e[f"
     print print_boards
-    # print "\e[2J\e[f"
-    # print "=============Computer Board=============" + "\n" + @ai_board.render + "\n"
-    # print "==============Player Board==============" + "\n" + @player_board.render(true) + "\n"
     if prior_result
       print prior_result
     end
@@ -135,9 +132,6 @@ def print_winner(human = true)
   who = human ? "You" : "I"
   print "\e[2J\e[f"
   print print_boards(true)
-
-  # print "\e[2J\e[f" + "=============Computer Board=============" + "\n" + @ai_board.render(true) +
-  # "==============Player Board==============" + "\n" + @player_board.render(true) +
   print "\n" + "#{who} win!" + "\n"
   greeting(false)
   start(gets.chomp.downcase)

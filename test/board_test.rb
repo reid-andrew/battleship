@@ -68,12 +68,12 @@ class BoardTest < Minitest::Test
 
     assert 0, cells_with_ship1.length
 
-    @board.place_random(@board, @cruiser)
+    @board.place_random(@cruiser)
     cells_with_ship2 = @board.cells.select { |coord, object| !object.empty}
 
     assert 3, cells_with_ship2.length
 
-    @board.place_random(@board, @submarine)
+    @board.place_random(@submarine)
     cells_with_ship3 = @board.cells.select { |coord, object| !object.empty}
 
     assert 5, cells_with_ship3.length
