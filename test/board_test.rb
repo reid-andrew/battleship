@@ -73,6 +73,13 @@ class BoardTest < Minitest::Test
     assert_equal "  1 2 3 4 \n", @board.render_top
   end
 
+
+  def test_it_gets_cells_for_row_render
+    expected = [@board.cells["A1"], @board.cells["A2"], @board.cells["A3"], @board.cells["A4"]]
+
+    assert_equal expected, @board.cells_for_row_render("A")
+  end
+
   def test_it_renders_rows
     @board.place(@cruiser, ["A1", "B1", "C1"])
     @board.place(@submarine, ["A3", "A4"])

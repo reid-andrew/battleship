@@ -32,7 +32,6 @@ class Board
     else
       false
     end
-
   end
 
   def place(ship, coordinates)
@@ -66,17 +65,16 @@ class Board
   end
 
   def render_row(letter, render_on = false)
-    my_cells = []
     output = letter
-    @cells.each do |cell, object|
-      if cell.include?(letter)
-        my_cells << object
-      end
-    end
-    my_cells.each do |cell|
-      output = output + " " + cell.render(render_on)
-    end
+    my_cells = cells_for_row_render(letter)
+    my_cells.each { |cell| output += " " + cell.render(render_on) }
     output
+  end
+
+  def cells_for_row_render(letter)
+    my_cells = []
+    @cells.each { |cell, object| my_cells << object if cell.include?(letter) }
+    my_cells
   end
 
   def render(render_on = false)
@@ -84,7 +82,6 @@ class Board
     ("A".."D").each do |letter|
       board_string = board_string + render_row(letter, render_on) + " \n"
     end
-    # print board_string
     board_string
   end
 
