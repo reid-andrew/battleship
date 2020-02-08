@@ -10,13 +10,6 @@ class CellTest < Minitest::Test
 
   def setup
     @game = Game.new
-    @computer_board = Board.new
-    @computer_cruiser = Ship.new("Computer Cruiser", 3)
-    @computer_sub = Ship.new("Computer Sub", 2)
-    @player_board = Board.new
-    @player_cruiser = Ship.new("Player Cruiser", 3)
-    @player_sub = Ship.new("Player Sub", 2)
-    require "pry"; binding.pry
   end
 
   def test_it_exists
@@ -24,11 +17,9 @@ class CellTest < Minitest::Test
   end
 
   def test_it_creates_game_elements
-    assert_instance_of Board, @computer_board
-    assert_instance_of Board, @player_board
-    assert_instance_of Ship, @computer_cruiser
-    assert_instance_of Ship, @computer_sub
-    assert_instance_of Ship, @player_cruiser
-    assert_instance_of Ship, @player_sub
+    @game.create_game_elements
+    assert_instance_of Board, @game.ai_board
+    assert_instance_of Ship, @game.ai_sub
   end
+
 end

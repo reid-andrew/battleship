@@ -2,9 +2,8 @@ require './lib/board'
 require './lib/ship'
 
 class Game
+  attr_reader :ai_board, :ai_sub
 
-  # Display text & get input to start game. Boolean input gets set automatically
-  # at false on repeat games to provide slightly different UI experience.
   def greeting(clear_screen = true)
     if clear_screen
       print "\e[2J\e[f" + "\n" + "Welcome to BATTLESHIP" + "\n"
@@ -14,7 +13,6 @@ class Game
     print "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
   end
 
-  # Starts game both for initial & repeat games
   def start(input)
     if input == "p"
       print "\e[2J\e[f"
@@ -28,10 +26,13 @@ class Game
     end
   end
 
-  # Creates game resources neccesssary to play
-  # Doing this here instead of in an initialize so that new resources are created
-  # for each game
   def game_initiation
+    create_game_elements
+    place_ai_ships
+    place_player_ships
+  end
+
+  def create_game_elements
     @ai_board = Board.new
     @ai_cruiser = Ship.new("AI Cruiser", 3)
     @ai_sub = Ship.new("AI Sub", 2)
@@ -39,9 +40,6 @@ class Game
     @player_board = Board.new
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
-
-    place_ai_ships
-    place_player_ships
   end
 
   def place_ai_ships
@@ -52,8 +50,6 @@ class Game
     2 units long." + "\n" + "\n"
   end
 
-  # This calls helper method (which calls another) to prompt player to place ships.
-  # Called by game_initiation method
   def place_player_ships
     print @player_board.render + "\n"
     player_ship_placement(@player_board, @player_cruiser, "Cruiser")
@@ -61,9 +57,6 @@ class Game
     turns
   end
 
-  # Calls place method in board class to place valid ships
-  # Recusively calls itself again if an invalid set of coordinates are provided.
-  # Called by place_player_ships method
   def player_ship_placement(board, ship, ship_type)
     board.place(ship, player_ship_input(ship_type))
     ship_length = ship.length
@@ -74,8 +67,6 @@ class Game
     end
   end
 
-  # Prompts user appropriate number of times for either cruiser or sub cells.
-  # Called by player_ship_placement method
   def player_ship_input(ship_type)
     counter = 0
     max_loop = 2
@@ -90,13 +81,7 @@ class Game
     player_inputs.sort
   end
 
-  # Method used by player to both place & fire upon ships. Calls itself again if
-  # invalid input provided.
-  # One exception to above is built in the ability to exit game early with '!!!'
   def player_coordinate_input(coordinate, shot = false)
-    # if shot
-    #   require "pry"; binding.pry
-    # end
     if coordinate == "!!!"
       abort("\n" + "Don't give up the ship, Captain!!!" + "\n" + "\n"+ "\n")
     elsif !@ai_board.valid_coordinate?(coordinate)
@@ -110,13 +95,12 @@ class Game
     end
   end
 
-  # Main class player interacts with each turn. Prints results of previous turn.
-  # Collects input from player for new turn.
-  # Calls itself again at end of each turn unless a winner has been declared.
   def turns(prior_result = nil)
     print "\e[2J\e[f"
-    print "Computer Board" + "\n" + @ai_board.render + "\n"
-    print "Player Board" + "\n" + @player_board.render(true) + "\n"
+    print print_boards
+    # print "\e[2J\e[f"
+    # print "=============Computer Board=============" + "\n" + @ai_board.render + "\n"
+    # print "==============Player Board==============" + "\n" + @player_board.render(true) + "\n"
     if prior_result
       print prior_result
     end
@@ -131,13 +115,11 @@ class Game
     winner == :game_continues ? turns(turn_result) : winner
   end
 
-  #  Used by method above to provide feedback on each player's turn.
   def turn_results(coord, board, human = true)
     who = human ? "Your" : "My"
     "\n" + "#{who} shot on #{coord} was a #{board.cells[coord].render_readable}"
   end
 
-  # Called at end of turns method to determine if either player has won.
   def winner
     if @player_cruiser.sunk && @player_sub.sunk
       print_winner(false)
@@ -151,9 +133,19 @@ end
 
 def print_winner(human = true)
   who = human ? "You" : "I"
-  print "\e[2J\e[f" + "Computer Board" + "\n" + @ai_board.render(true) +
-  "Player Board" + "\n" + @player_board.render(true) +
-  "\n" + "#{who} win!" + "\n"
+  print "\e[2J\e[f"
+  print print_boards(true)
+
+  # print "\e[2J\e[f" + "=============Computer Board=============" + "\n" + @ai_board.render(true) +
+  # "==============Player Board==============" + "\n" + @player_board.render(true) +
+  print "\n" + "#{who} win!" + "\n"
   greeting(false)
   start(gets.chomp.downcase)
+end
+
+def print_boards(render_both = false)
+  "=============Computer Board=============" +
+  "\n" + @ai_board.render(render_both) + "\n" +
+  "==============Player Board==============" + "\n" +
+  @player_board.render(true) + "\n"
 end
