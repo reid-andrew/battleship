@@ -20,7 +20,7 @@ class Game
       print "\e[2J\e[f"
       game_initiation
     elsif input == "q"
-      print "\n" + "Sea you later!!!" + "\n" + "\n" + "\n"
+      print "\e[2J\e[f"+ "\n" + "Sea you later!!!" + "\n" + "\n" + "\n"
     else
       print "\e[2J\e[f" + "\n" + "Invalid response.
       Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
@@ -126,7 +126,7 @@ class Game
     @player_board.cells[input_coordinate].fire_upon
 
     player_result = turn_results(input_coordinate, @ai_board)
-    ai_result = turn_results(input_coordinate, @ai_board, false)
+    ai_result = turn_results(input_coordinate, @player_board, false)
     turn_result = player_result + ai_result + "\n" + "\n"
     winner == :game_continues ? turns(turn_result) : winner
   end
@@ -140,17 +140,20 @@ class Game
   # Called at end of turns method to determine if either player has won.
   def winner
     if @player_cruiser.sunk && @player_sub.sunk
-      print "\e[2J\e[f" + "Player Board" + "\n" + @player_board.render +
-      "\n" + "I win!" + "\n"
-      greeting(false)
-      start(gets.chomp.downcase)
+      print_winner(false)
     elsif @ai_cruiser.sunk && @ai_sub.sunk
-      print "\e[2J\e[f" + "Computer Board" + "\n" + @ai_board.render +
-      "\n" + "You win!" + "\n"
-      greeting(false)
-      start(gets.chomp.downcase)
+      print_winner
     else
       :game_continues
     end
   end
+end
+
+def print_winner(human = true)
+  who = human ? "You" : "I"
+  print "\e[2J\e[f" + "Computer Board" + "\n" + @ai_board.render(true) +
+  "Player Board" + "\n" + @player_board.render(true) +
+  "\n" + "#{who} win!" + "\n"
+  greeting(false)
+  start(gets.chomp.downcase)
 end
