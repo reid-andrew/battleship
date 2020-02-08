@@ -5,12 +5,15 @@ class Game
   attr_reader :ai_board, :ai_sub
 
   def greeting(clear_screen = true)
-    if clear_screen
-      print "\e[2J\e[f" + "\n" + "Welcome to BATTLESHIP" + "\n"
-    else
-      print "\n" + "Ready for another game of BATTLESHIP?" + "\n" + "\n"
-    end
-    print "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
+    print greeting_text(clear_screen)
+  end
+
+  def greeting_text(clear_screen)
+    new = "\e[2J\e[f" + "\n" + "Welcome to BATTLESHIP" + "\n"
+    repeat = "\n" + "Ready for another game of BATTLESHIP?" + "\n" + "\n"
+
+    start = clear_screen ? new : repeat
+    start + "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
   end
 
   def start(input)

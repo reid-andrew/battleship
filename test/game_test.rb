@@ -22,4 +22,12 @@ class CellTest < Minitest::Test
     assert_instance_of Ship, @game.ai_sub
   end
 
+  def test_it_presents_greeting_text
+    new = "\e[2J\e[f" + "\n" + "Welcome to BATTLESHIP" + "\n" + "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
+    repeat = "\n" + "Ready for another game of BATTLESHIP?" + "\n" + "\n" + "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
+
+    assert_equal new, @game.greeting_text(true)
+    assert_equal repeat, @game.greeting_text(false)
+  end
+
 end
