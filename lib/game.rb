@@ -45,9 +45,8 @@ class Game
   end
 
   def place_ai_ships
-    # **********************************
-    # Code to place ai ships here
-    # **********************************
+    @ai_board.place_random(@ai_board, @ai_sub)
+    @ai_board.place_random(@ai_board, @ai_cruiser)
     print "\n" + "My ships are laid out on the grid. Now it's time to place
     yours." + "\n" + "\n" + "The Cruiser is 3 units long and the Submarine is
     2 units long." + "\n" + "\n"
