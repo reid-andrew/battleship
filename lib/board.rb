@@ -5,11 +5,11 @@ class Board
 
   def initialize
     @cells = {}
-      ("A".."D").each do |letter|
-        (1..4).each do |number|
-          @cells["#{letter}#{number}"] = Cell.new("#{letter}#{number}")
-        end
+    ("A".."D").each do |letter|
+      (1..4).each do |number|
+        @cells["#{letter}#{number}"] = Cell.new("#{letter}#{number}")
       end
+    end
   end
 
   def valid_coordinate?(coordinate)
@@ -17,8 +17,7 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    coord_letters = []
-    coord_numbers = []
+    coord_letters, coord_numbers = [], []
     coordinates.each do |coord|
       coord_letters << @cells[coord].coordinate[0]
       coord_numbers << @cells[coord].coordinate[1..-1].to_i
@@ -57,7 +56,7 @@ class Board
     valids.empty? ? place_random(ship, length) : coordinates = valids.sample
 
     board.place(ship, coordinates)
-    end
+  end
 
   def render_top(size = 4)
     render_output = " "
