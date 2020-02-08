@@ -89,13 +89,6 @@ class BoardTest < Minitest::Test
     assert_equal "  1 2 3 4 \n", @board.render_top
   end
 
-  def test_it_gets_cells_for_row_render
-    expected = [@board.cells["A1"], @board.cells["A2"], @board.cells["A3"], @board.cells["A4"]]
-
-    assert_equal expected, @board.cells_for_row_render("A")
-    assert_equal [], @board.cells_for_row_render("X")
-  end
-
   def test_it_renders_rows
     @board.place(@cruiser, ["A1", "B1", "C1"])
     @board.place(@submarine, ["A3", "A4"])
@@ -110,6 +103,13 @@ class BoardTest < Minitest::Test
 
     assert_equal "A H M X X", @board.render_row("A")
     assert_equal "A H M X X", @board.render_row("A", true)
+  end
+
+  def test_it_gets_cells_for_row_render
+    expected = [@board.cells["A1"], @board.cells["A2"], @board.cells["A3"], @board.cells["A4"]]
+
+    assert_equal expected, @board.cells_for_row_render("A")
+    assert_equal [], @board.cells_for_row_render("X")
   end
 
   def test_it_renders_boards
@@ -128,6 +128,16 @@ class BoardTest < Minitest::Test
 
     assert_equal board2, @board.render
     assert_equal board3, @board.render(true)
+  end
+
+  def test_it_finds_cells_available_to_fire_upon
+    assert_equal false, @board.cells_available_to_fire_upon("A3")
+    assert_equal false, @board.cells_available_to_fire_upon("A4")
+
+    @board.cells["A3"].fire_upon
+
+    assert_equal true, @board.cells_available_to_fire_upon("A3")
+    assert_equal false, @board.cells_available_to_fire_upon("A4")
   end
 
 end
