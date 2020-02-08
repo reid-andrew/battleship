@@ -22,16 +22,15 @@ class Board
       coord_letters << @cells[coord].coordinate[0]
       coord_numbers << @cells[coord].coordinate[1..-1].to_i
     end
+    return false if incorrect_ship_length(ship, coordinates)
+    return true if ("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1
+    return true if (1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1
+    return false
+  end
 
-    if ship.length != coordinates.length || (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
-      false
-    elsif ("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1
-      true
-    elsif (1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1
-      true
-    else
-      false
-    end
+  def incorrect_ship_length(ship, coordinates)
+    ship.length != coordinates.length ||
+    (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
   end
 
   def place(ship, coordinates)

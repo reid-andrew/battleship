@@ -29,11 +29,10 @@ class Cell
     return fired_upon? ? "H" : "S" if render_on
     return fired_upon? ? "H" : "."
   end
-r
+
   def render_readable
     return "hit." if render == "H"
     return "miss." if render == "M"
     return "hit and sink." if render == "X"
   end
-
 end

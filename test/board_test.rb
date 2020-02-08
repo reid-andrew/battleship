@@ -31,6 +31,9 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_validates_ship_length
+    assert_equal true, @board.incorrect_ship_length(@cruiser, ["A1", "A2"])
+    assert_equal true, @board.incorrect_ship_length(@submarine, ["A2", "A3", "A4"])
+
     assert_equal false, @board.valid_placement?(@cruiser, ["A1", "A2"])
     assert_equal false, @board.valid_placement?(@submarine, ["A2", "A3", "A4"])
   end
