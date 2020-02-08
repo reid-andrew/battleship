@@ -63,6 +63,22 @@ class BoardTest < Minitest::Test
     assert_nil @board.cells["A4"].ship
   end
 
+  def test_it_places_computer_ship
+    cells_with_ship1 = @board.cells.select { |coord, object| !object.empty}
+
+    assert 0, cells_with_ship1.length
+
+    @board.place_random(@board, @cruiser)
+    cells_with_ship2 = @board.cells.select { |coord, object| !object.empty}
+
+    assert 3, cells_with_ship2.length
+
+    @board.place_random(@board, @submarine)
+    cells_with_ship3 = @board.cells.select { |coord, object| !object.empty}
+
+    assert 5, cells_with_ship3.length
+  end
+
   def test_only_one_ship_per_cell
     @board.place(@cruiser, ["A1", "A2", "A3"])
 
