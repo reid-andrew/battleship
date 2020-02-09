@@ -119,13 +119,27 @@ class Game
   end
 
   def ai_take_shot(board)
-    valid = board.cells.keys.reject { |key| board.cells[key].fired_upon? }
-    hit_ship?(board).empty? ? valid.sample : ai_take_aim(board)
-    valid.sample
+    valids = board.cells.keys.reject { |key| board.cells[key].fired_upon? }
+    hit_ship?(board).empty? ? valids.sample : ai_take_aim(board)
   end
 
   def ai_take_aim(board)
-    # hit_ship?(board) == [whatever cells are hit but not sunk]
+    hits, col_cells, row_cells, hitlist = hit_ship?(board), [], [], []
+    all_cells = board.cells.keys
+
+    hits.each do |hit|
+      all_cells.each { |cell| row_cells << cell if cell[0] == hit[0] }
+      row_cells.each_cons(2) { |pair| hitlist << pair if pair.include?(hit) }
+
+      all_cells.each { |cell| col_cells << cell if cell[1..-1] == hit[1..-1] }
+      col_cells.each_cons(2) { |pair| hitlist << pair if pair.include?(hit) }
+    end
+
+      hitlist.flatten!
+      hitlist.uniq!
+      hitlist.reject! { |cell| board.cells[cell].fired_upon? }
+      print hitlist
+      hitlist.sample
 
   end
 
