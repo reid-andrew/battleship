@@ -44,4 +44,22 @@ class CellTest < Minitest::Test
     assert_equal expected2, @game.turn_results("A2", @game.player_board, false)
   end
 
+  def test_it_can_track_hits
+    board = Board.new
+    ship = Ship.new("Cruiser", 3)
+    board.place(ship, ["B1", "B2", "B3"])
+
+    assert_equal [], @game.hit_ship?(board)
+
+    board.cells["B1"].fire_upon
+    board.cells["B2"].fire_upon
+
+    assert_equal ["B1", "B2"], @game.hit_ship?(board)
+
+    board.cells["B3"].fire_upon
+
+    assert_equal [], @game.hit_ship?(board)
+
+  end
+
 end
