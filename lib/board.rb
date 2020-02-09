@@ -43,16 +43,16 @@ class Board
   end
 
   def place_random(board, ship)
-    empties, rowcells, columncells, valids = [], [], [], []
+    empties, row_cells, col_cells, valids = [], [], [], []
 
     empties = board.cells.keys.select { |key| board.cells[key].empty? }
     genesis = empties.sample
 
-    empties.each { |cell| rowcells << cell if cell[0] == genesis[0] }
-    rowcells.each_cons(ship.length) { |cells| valids << cells if cells.include? genesis }
+    empties.each { |cell| row_cells << cell if cell[0] == genesis[0] }
+    row_cells.each_cons(ship.length) { |cells| valids << cells if cells.include? genesis }
 
-    empties.each { |cell| columncells << cell if cell[1..-1] == genesis[1..-1] }
-    columncells.each_cons(ship.length) { |cells| valids << cells if cells.include? genesis }
+    empties.each { |cell| col_cells << cell if cell[1..-1] == genesis[1..-1] }
+    col_cells.each_cons(ship.length) { |cells| valids << cells if cells.include? genesis }
 
     valids.empty? ? place_random(ship, length) : coordinates = valids.sample
 
