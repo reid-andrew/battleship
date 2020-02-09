@@ -79,4 +79,19 @@ class CellTest < Minitest::Test
     assert_includes ["A2", "B1", "B4", "C2"], @game.ai_take_aim(board)
   end
 
+  def test_it_chooses_aimed_or_random_shot
+    board = Board.new
+    ship = Ship.new("Submarine", 2)
+    board.place(ship, ["A3", "A4"])
+    board.cells.keys.each do |key|
+      board.cells[key].fire_upon unless key[0] == "A"
+    end
+
+    assert_includes ["A1", "A2", "A3", "A4"], @game.ai_take_shot(board)
+
+    board.cells["A4"].fire_upon
+
+    assert_equal "A3", @game.ai_take_shot(board)
+  end
+
 end
