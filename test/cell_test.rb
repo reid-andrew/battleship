@@ -27,6 +27,7 @@ class CellTest < Minitest::Test
 
   def test_it_can_place_ship
     @cell.place_ship(@cruiser)
+
     assert_equal @cruiser, @cell.ship
     assert_equal false, @cell.empty?
   end
@@ -38,24 +39,50 @@ class CellTest < Minitest::Test
   def test_it_gets_fired_upon
     @cell.place_ship(@cruiser)
     @cell.fire_upon
+
     assert_equal 2, @cell.ship.health
     assert @cell.fired_upon?
   end
 
   def test_it_renders_without_ship
     assert_equal ".", @cell.render
+
     @cell.fire_upon
+
     assert_equal "M", @cell.render
   end
 
   def test_it_renders_with_ship
     @cell.place_ship(@cruiser)
+
     assert_equal ".", @cell.render
     assert_equal "S", @cell.render(true)
+
     @cell.fire_upon
+
     assert_equal "H", @cell.render
+
     @cruiser.hit
     @cruiser.hit
+
     assert_equal "X", @cell.render
+  end
+
+  def test_it_renders_readable_with_ship
+    @cell.place_ship(@cruiser)
+    @cell.fire_upon
+
+    assert_equal "hit.", @cell.render_readable
+
+    @cruiser.hit
+    @cruiser.hit
+
+    assert_equal "hit and sink.", @cell.render_readable
+
+    cell2 = Cell.new("C4")
+    cell2.fire_upon
+
+    assert_equal "miss.", cell2.render_readable
+
   end
 end

@@ -24,17 +24,10 @@ class Cell
   end
 
   def render(render_on = false)
-    if @ship == nil
-      fired_upon? ? "M" : "."
-    elsif @ship.sunk?
-      "X"
-    else
-      if render_on
-        fired_upon? ? "H" : "S"
-      else
-        fired_upon? ? "H" : "."
-      end
-    end
+    return fired_upon? ? "M" : "." if @ship == nil
+    return "X" if @ship.sunk?
+    return fired_upon? ? "H" : "S" if render_on
+    return fired_upon? ? "H" : "."
   end
 
   def render_readable
@@ -42,5 +35,4 @@ class Cell
     return "miss." if render == "M"
     return "hit and sink." if render == "X"
   end
-
 end

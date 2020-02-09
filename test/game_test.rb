@@ -10,13 +10,6 @@ class CellTest < Minitest::Test
 
   def setup
     @game = Game.new
-    @computer_board = Board.new
-    @computer_cruiser = Ship.new("Computer Cruiser", 3)
-    @computer_sub = Ship.new("Computer Sub", 2)
-    @player_board = Board.new
-    @player_cruiser = Ship.new("Player Cruiser", 3)
-    @player_sub = Ship.new("Player Sub", 2)
-    require "pry"; binding.pry
   end
 
   def test_it_exists
@@ -24,11 +17,31 @@ class CellTest < Minitest::Test
   end
 
   def test_it_creates_game_elements
-    assert_instance_of Board, @computer_board
-    assert_instance_of Board, @player_board
-    assert_instance_of Ship, @computer_cruiser
-    assert_instance_of Ship, @computer_sub
-    assert_instance_of Ship, @player_cruiser
-    assert_instance_of Ship, @player_sub
+    @game.create_game_elements
+    assert_instance_of Board, @game.ai_board
+    assert_instance_of Ship, @game.ai_sub
   end
+
+  def test_it_presents_greeting_text
+    new = "\e[2J\e[f" + "\n" + "Welcome to BATTLESHIP" + "\n" + "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
+    repeat = "\n" + "Ready for another game of BATTLESHIP?" + "\n" + "\n" + "Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
+
+    assert_equal new, @game.greeting_text(true)
+    assert_equal repeat, @game.greeting_text(false)
+  end
+
+  def test_turn_results_are_provided
+    @game.create_game_elements
+    @game.ai_board.cells["A1"].fire_upon
+    expected1 = "\n" + "Your shot on A1 was a miss."
+
+    assert_equal expected1, @game.turn_results("A1", @game.ai_board, true)
+
+    @game.player_board.place(@game.player_sub, ["A2", "A3"])
+    @game.player_board.cells["A2"].fire_upon
+    expected2 = "\n" + "My shot on A2 was a hit."
+
+    assert_equal expected2, @game.turn_results("A2", @game.player_board, false)
+  end
+
 end

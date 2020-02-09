@@ -5,4 +5,4 @@ require './lib/game'
 
 game = Game.new
 game.greeting
-game.start(gets.chomp)
+game.start(gets.chomp.downcase)

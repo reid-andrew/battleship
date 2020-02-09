@@ -5,11 +5,11 @@ class Board
 
   def initialize
     @cells = {}
-      ("A".."D").each do |letter|
-        (1..4).each do |number|
-          @cells["#{letter}#{number}"] = Cell.new("#{letter}#{number}")
-        end
+    ("A".."D").each do |letter|
+      (1..4).each do |number|
+        @cells["#{letter}#{number}"] = Cell.new("#{letter}#{number}")
       end
+    end
   end
 
   def valid_coordinate?(coordinate)
@@ -17,23 +17,25 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    coord_letters = []
-    coord_numbers = []
+    return false if incorrect_ship_length(ship, coordinates)
+    return true if consecutive_coordinates_chosen(ship, coordinates)
+    return false
+  end
+
+  def incorrect_ship_length(ship, coordinates)
+    ship.length != coordinates.length ||
+    (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
+  end
+
+  def consecutive_coordinates_chosen(ship, coordinates)
+    coord_letters, coord_numbers = [], []
     coordinates.each do |coord|
       coord_letters << @cells[coord].coordinate[0]
       coord_numbers << @cells[coord].coordinate[1..-1].to_i
     end
 
-    if ship.length != coordinates.length || (coordinates.any? { |coordinate| @cells[coordinate].empty? == false})
-      false
-    elsif ("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1
-      true
-    elsif (1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1
-      true
-    else
-      false
-    end
-
+    (("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1) ||
+    ((1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1)
   end
 
   def place(ship, coordinates)
@@ -42,10 +44,10 @@ class Board
     end
   end
 
-  def place_random(board, ship)
+  def place_random(ship)
     empties, row_cells, col_cells, valids = [], [], [], []
 
-    empties = board.cells.keys.select { |key| board.cells[key].empty? }
+    empties = @cells.keys.select { |key| @cells[key].empty? }
     genesis = empties.sample
 
     empties.each { |cell| row_cells << cell if cell[0] == genesis[0] }
@@ -56,8 +58,8 @@ class Board
 
     valids.empty? ? place_random(ship, length) : coordinates = valids.sample
 
-    board.place(ship, coordinates)
-    end
+    place(ship, coordinates)
+  end
 
   def render_top(size = 4)
     render_output = " "
@@ -67,17 +69,16 @@ class Board
   end
 
   def render_row(letter, render_on = false)
-    my_cells = []
     output = letter
-    @cells.each do |cell, object|
-      if cell.include?(letter)
-        my_cells << object
-      end
-    end
-    my_cells.each do |cell|
-      output = output + " " + cell.render(render_on)
-    end
+    my_cells = cells_for_row_render(letter)
+    my_cells.each { |cell| output += " " + cell.render(render_on) }
     output
+  end
+
+  def cells_for_row_render(letter)
+    my_cells = []
+    @cells.each { |cell, object| my_cells << object if cell.include?(letter) }
+    my_cells
   end
 
   def render(render_on = false)
@@ -85,7 +86,6 @@ class Board
     ("A".."D").each do |letter|
       board_string = board_string + render_row(letter, render_on) + " \n"
     end
-    # print board_string
     board_string
   end
 
