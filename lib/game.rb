@@ -138,9 +138,7 @@ class Game
       hitlist.flatten!
       hitlist.uniq!
       hitlist.reject! { |cell| board.cells[cell].fired_upon? }
-      print hitlist
       hitlist.sample
-
   end
 
   # Main class player interacts with each turn. Prints results of previous turn.
