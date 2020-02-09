@@ -59,7 +59,24 @@ class CellTest < Minitest::Test
     board.cells["B3"].fire_upon
 
     assert_equal [], @game.hit_ship?(board)
+  end
 
+  def test_it_can_aim_next_to_hits
+    board = Board.new
+    ship1 = Ship.new("Cruiser", 3)
+    ship2 = Ship.new("Submarine", 2)
+    board.place(ship1, ["B1", "B2", "B3"])
+    board.place(ship2, ["C3", "D3"])
+    board.cells["C3"].fire_upon
+
+    assert_includes ["B3", "C2", "C4", "D3"], @game.ai_take_aim(board)
+
+    board.cells["B3"].fire_upon
+    board.cells["D3"].fire_upon
+    board.cells["A3"].fire_upon
+    board.cells["B2"].fire_upon
+
+    assert_includes ["A2", "B1", "B4", "C2"], @game.ai_take_aim(board)
   end
 
 end
