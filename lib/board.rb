@@ -1,12 +1,14 @@
 require './lib/cell'
 
 class Board
-  attr_reader :cells
+  attr_reader :cells, :height, :width
 
-  def initialize
+  def initialize(height = 4, width = 4)
+    @height = height
+    @width = width
     @cells = {}
-    ("A".."D").each do |letter|
-      (1..4).each do |number|
+    "A".upto("Z").to_a.first(height).each do |letter|
+      (1..width).each do |number|
         @cells["#{letter}#{number}"] = Cell.new("#{letter}#{number}")
       end
     end
@@ -61,9 +63,9 @@ class Board
     place(ship, coordinates)
   end
 
-  def render_top(size = 4)
+  def render_top
     render_output = " "
-    size.times { |i| render_output += " " + (i + 1).to_s }
+    @width.times { |i| render_output += " " + (i + 1).to_s }
     render_output += " \n"
     render_output
   end
@@ -83,7 +85,7 @@ class Board
 
   def render(render_on = false)
     board_string = render_top
-    ("A".."D").each do |letter|
+    "A".upto("Z").to_a.first(@height).each do |letter|
       board_string = board_string + render_row(letter, render_on) + " \n"
     end
     board_string

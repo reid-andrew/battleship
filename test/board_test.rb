@@ -7,7 +7,7 @@ require './lib/board'
 class BoardTest < Minitest::Test
 
   def setup
-    @board = Board.new
+    @board = Board.new(5, 5)
     @cruiser = Ship.new("Cruiser", 3)
     @submarine = Ship.new("Submarine", 2)
   end
@@ -18,15 +18,15 @@ class BoardTest < Minitest::Test
 
   def test_it_has_cells
     assert_instance_of Hash, @board.cells
-    assert_equal 16, @board.cells.size
+    assert_equal 25, @board.cells.size
     assert_equal "A2", @board.cells["A2"].coordinate
     assert_equal "C4", @board.cells["C4"].coordinate
   end
 
   def test_it_validates_coordinates
     assert @board.valid_coordinate?("A1")
-    assert_equal false, @board.valid_coordinate?("A5")
-    assert_equal false, @board.valid_coordinate?("E1")
+    assert_equal false, @board.valid_coordinate?("A50")
+    assert_equal false, @board.valid_coordinate?("a1")
     assert_equal false, @board.valid_coordinate?("A22")
   end
 
@@ -94,34 +94,34 @@ class BoardTest < Minitest::Test
   end
 
   def test_it_renders_top_of_board
-    assert_equal "  1 2 3 4 \n", @board.render_top
+    assert_equal "  1 2 3 4 5 \n", @board.render_top
   end
 
   def test_it_renders_rows
     @board.place(@cruiser, ["A1", "B1", "C1"])
     @board.place(@submarine, ["A3", "A4"])
 
-    assert_equal "A . . . .", @board.render_row("A")
-    assert_equal "A S . S S", @board.render_row("A", true)
+    assert_equal "A . . . . .", @board.render_row("A")
+    assert_equal "A S . S S .", @board.render_row("A", true)
 
     @board.cells["A1"].fire_upon
     @board.cells["A2"].fire_upon
     @board.cells["A3"].fire_upon
     @board.cells["A4"].fire_upon
 
-    assert_equal "A H M X X", @board.render_row("A")
-    assert_equal "A H M X X", @board.render_row("A", true)
+    assert_equal "A H M X X .", @board.render_row("A")
+    assert_equal "A H M X X .", @board.render_row("A", true)
   end
 
   def test_it_gets_cells_for_row_render
-    expected = [@board.cells["A1"], @board.cells["A2"], @board.cells["A3"], @board.cells["A4"]]
+    expected = [@board.cells["A1"], @board.cells["A2"], @board.cells["A3"], @board.cells["A4"], @board.cells["A5"]]
 
     assert_equal expected, @board.cells_for_row_render("A")
     assert_equal [], @board.cells_for_row_render("X")
   end
 
   def test_it_renders_boards
-    board1 = "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
+    board1 = "  1 2 3 4 5 \nA . . . . . \nB . . . . . \nC . . . . . \nD . . . . . \nE . . . . . \n"
 
     assert_equal board1, @board.render
 
@@ -131,8 +131,8 @@ class BoardTest < Minitest::Test
     @board.cells["C3"].fire_upon
     @board.cells["D3"].fire_upon
     @board.cells["D4"].fire_upon
-    board2 = "  1 2 3 4 \nA . H . . \nB . . . . \nC . . X . \nD . . X M \n"
-    board3 = "  1 2 3 4 \nA S H S . \nB . . . . \nC . . X . \nD . . X M \n"
+    board2 = "  1 2 3 4 5 \nA . H . . . \nB . . . . . \nC . . X . . \nD . . X M . \nE . . . . . \n"
+    board3 = "  1 2 3 4 5 \nA S H S . . \nB . . . . . \nC . . X . . \nD . . X M . \nE . . . . . \n"
 
     assert_equal board2, @board.render
     assert_equal board3, @board.render(true)
