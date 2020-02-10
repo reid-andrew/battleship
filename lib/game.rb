@@ -23,6 +23,7 @@ class Game
     elsif input == "q"
       print clear_output
       print "Sea you later!!!" + "\n" + "\n" + "\n"
+      exit
     else
       print clear_output + "\n" + "Invalid response.
       Enter 'p' to play. Enter 'q' to quit." + "\n" + "> "
