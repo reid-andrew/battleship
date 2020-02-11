@@ -135,12 +135,7 @@ class Game
   end
 
   def turns(prior_result = nil)
-    print clear_output
-    print print_boards
-    if prior_result
-      print prior_result
-    end
-    print "On which coordinate would you like to fire?" + "\n" + "> "
+    turns_print(prior_result)
     input_coordinate = player_coordinate_input(gets.chomp.capitalize, true)
     @ai_board.cells[input_coordinate].fire_upon
     ai_coordinate = ai_take_shot(@player_board)
@@ -150,6 +145,15 @@ class Game
     ai_result = turn_results(ai_coordinate, @player_board, false)
     turn_result = player_result + ai_result + "\n" + "\n"
     winner(turn_result) == :game_continues ? turns(turn_result) : winner(turn_result)
+  end
+
+  def turns_print(prior_result)
+    print clear_output
+    print print_boards
+    if prior_result
+      print prior_result
+    end
+    print "On which coordinate would you like to fire?" + "\n" + "> "
   end
 
   def turn_results(coord, board, human = true)
