@@ -21,8 +21,7 @@ class Game
       print clear_output
       game_initiation
     elsif input == "q"
-      print clear_output
-      print "Sea you later!!!" + "\n" + "\n" + "\n"
+      print clear_output + "Sea you later!!!" + "\n" + "\n" + "\n"
       exit
     else
       print clear_output + "\n" + "Invalid response.
@@ -148,11 +147,7 @@ class Game
   end
 
   def turns_print(prior_result)
-    print clear_output
-    print print_boards
-    if prior_result
-      print prior_result
-    end
+    print clear_output + print_boards + (prior_result ? prior_result : "")
     print "On which coordinate would you like to fire?" + "\n" + "> "
   end
 
@@ -176,11 +171,8 @@ class Game
   end
 
   def print_winner(turn_result, human)
-    who = human ? "You" : "I"
-    print clear_output
-    print print_boards(true)
-    print turn_result
-    "\n" + "#{who} win!" + "\n"
+    print clear_output + print_boards(true) + turn_result
+    "\n" + "#{human ? "You" : "I"} win!" + "\n"
   end
 
   def print_boards(render_both = false)
