@@ -21,8 +21,7 @@ class Game
       print clear_output
       game_initiation
     elsif input == "q"
-      print clear_output
-      print "Sea you later!!!" + "\n" + "\n" + "\n"
+      print clear_output + "Sea you later!!!" + "\n" + "\n" + "\n"
       exit
     else
       print clear_output + "\n" + "Invalid response.
@@ -134,17 +133,8 @@ class Game
       hitlist.sample
   end
 
-  # Main class player interacts with each turn. Prints results of previous turn.
-  # Collects input from player for new turn.
-  # Calls itself again at end of each turn unless a winner has been declared.
-
   def turns(prior_result = nil)
-    print clear_output
-    print print_boards
-    if prior_result
-      print prior_result
-    end
-    print "On which coordinate would you like to fire?" + "\n" + "> "
+    turns_print(prior_result)
     input_coordinate = player_coordinate_input(gets.chomp.capitalize, true)
     @ai_board.cells[input_coordinate].fire_upon
     ai_coordinate = ai_take_shot(@player_board)
@@ -153,7 +143,12 @@ class Game
     player_result = turn_results(input_coordinate, @ai_board)
     ai_result = turn_results(ai_coordinate, @player_board, false)
     turn_result = player_result + ai_result + "\n" + "\n"
-    winner == :game_continues ? turns(turn_result) : winner
+    winner(turn_result) == :game_continues ? turns(turn_result) : winner(turn_result)
+  end
+
+  def turns_print(prior_result)
+    print clear_output + print_boards + (prior_result ? prior_result : "")
+    print "On which coordinate would you like to fire?" + "\n" + "> "
   end
 
   def turn_results(coord, board, human = true)
@@ -161,13 +156,13 @@ class Game
     "\n" + "#{who} shot on #{coord} was a #{board.cells[coord].render_readable}"
   end
 
-  def winner
+  def winner(turn_result)
     if @player_cruiser.sunk && @player_sub.sunk
-      print print_winner(false)
+      print print_winner(turn_result, false)
       greeting(false)
       start(gets.chomp.downcase)
     elsif @ai_cruiser.sunk && @ai_sub.sunk
-      print print_winner
+      print print_winner(turn_result, true)
       greeting(false)
       start(gets.chomp.downcase)
     else
@@ -175,11 +170,9 @@ class Game
     end
   end
 
-  def print_winner(human = true)
-    who = human ? "You" : "I"
-    print clear_output
-    print print_boards(true)
-    "\n" + "#{who} win!" + "\n"
+  def print_winner(turn_result, human)
+    print clear_output + print_boards(true) + turn_result
+    "\n" + "#{human ? "You" : "I"} win!" + "\n"
   end
 
   def print_boards(render_both = false)

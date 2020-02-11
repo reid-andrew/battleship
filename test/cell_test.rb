@@ -38,6 +38,7 @@ class CellTest < Minitest::Test
 
   def test_it_gets_fired_upon
     @cell.place_ship(@cruiser)
+    assert_equal 3, @cell.ship.health
     @cell.fire_upon
 
     assert_equal 2, @cell.ship.health
@@ -59,7 +60,6 @@ class CellTest < Minitest::Test
     assert_equal "S", @cell.render(true)
 
     @cell.fire_upon
-
     assert_equal "H", @cell.render
 
     @cruiser.hit
@@ -83,6 +83,5 @@ class CellTest < Minitest::Test
     cell2.fire_upon
 
     assert_equal "miss.", cell2.render_readable
-
   end
 end
