@@ -2,7 +2,7 @@ require './lib/board'
 require './lib/ship'
 
 class Game
-  attr_reader :ai_board, :ai_sub, :player_board, :player_sub
+  attr_reader :ai_board, :ai_sub, :player_board, :player_sub, :board_height, :board_width
 
   def greeting(clear_screen = true)
     print greeting_text(clear_screen)
@@ -37,12 +37,21 @@ class Game
     place_player_ships
   end
 
+  def set_board_size
+    puts "Enter a board height between 4 and 26."
+    input_height = gets.chomp.to_i
+    if input_height >= 4 && input_height <= 26
+
+
+
+  end
+
   def create_game_elements
-    @ai_board = Board.new
+    @ai_board = Board.new(height, width)
     @ai_cruiser = Ship.new("AI Cruiser", 3)
     @ai_sub = Ship.new("AI Sub", 2)
 
-    @player_board = Board.new
+    @player_board = Board.new(height, width)
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
   end
