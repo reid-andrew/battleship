@@ -2,7 +2,12 @@ require './lib/board'
 require './lib/ship'
 
 class Game
-  attr_reader :ai_board, :ai_sub, :player_board, :player_sub
+  attr_reader :ai_board,
+              :ai_sub,
+              :ai_cruiser,
+              :player_board,
+              :player_sub,
+              :player_cruiser
 
   def greeting(clear_screen = true)
     print greeting_text(clear_screen)

@@ -123,5 +123,4 @@ class CellTest < Minitest::Test
     assert_equal :game_continues, @game.winner(player_results)
     assert_equal :game_continues, @game.winner(ai_results)
   end
-
 end
