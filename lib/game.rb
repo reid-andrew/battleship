@@ -2,7 +2,19 @@ require './lib/board'
 require './lib/ship'
 
 class Game
-  attr_reader :ai_board, :ai_sub, :player_board, :player_sub, :board_height, :board_width
+  attr_reader :ai_board,
+              :ai_sub,
+              :ai_cruiser,
+              :player_board,
+              :player_sub,
+              :player_cruiser,
+              :board_height,
+              :board_width
+
+  def initialize
+    @board_height = 4
+    @board_width = 4
+  end
 
   def greeting(clear_screen = true)
     print greeting_text(clear_screen)
@@ -21,8 +33,7 @@ class Game
       print clear_output
       game_initiation
     elsif input == "q"
-      print clear_output
-      print "Sea you later!!!" + "\n" + "\n" + "\n"
+      print clear_output + "Sea you later!!!" + "\n" + "\n" + "\n"
       exit
     else
       print clear_output + "\n" + "Invalid response.
@@ -32,26 +43,33 @@ class Game
   end
 
   def game_initiation
+    set_board_size
     create_game_elements
     place_ai_ships
     place_player_ships
   end
 
   def set_board_size
-    puts "Enter a board height between 4 and 26."
-    input_height = gets.chomp.to_i
-    if input_height >= 4 && input_height <= 26
-
-
-
+    puts "Enter 1 to assign custom board dimensions or anything else for 4 by 4."
+    option = gets.chomp
+    if option == "1"
+      until @board_height > 3 && @board_height < 27
+        puts "Enter a height between 4 and 26."
+        @board_height = gets.chomp.to_i
+      end
+      until @board_width > 3 && @board_width < 76
+        puts "Enter a width between 4 and 75"
+        @board_width = gets.chomp.to_i
+      end
+    end
   end
 
   def create_game_elements
-    @ai_board = Board.new(height, width)
+    @ai_board = Board.new(@board_height, @board_width)
     @ai_cruiser = Ship.new("AI Cruiser", 3)
     @ai_sub = Ship.new("AI Sub", 2)
 
-    @player_board = Board.new(height, width)
+    @player_board = Board.new(@board_height, @board_width)
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
   end
@@ -143,17 +161,8 @@ class Game
       hitlist.sample
   end
 
-  # Main class player interacts with each turn. Prints results of previous turn.
-  # Collects input from player for new turn.
-  # Calls itself again at end of each turn unless a winner has been declared.
-
   def turns(prior_result = nil)
-    print clear_output
-    print print_boards
-    if prior_result
-      print prior_result
-    end
-    print "On which coordinate would you like to fire?" + "\n" + "> "
+    turns_print(prior_result)
     input_coordinate = player_coordinate_input(gets.chomp.capitalize, true)
     @ai_board.cells[input_coordinate].fire_upon
     ai_coordinate = ai_take_shot(@player_board)
@@ -162,7 +171,12 @@ class Game
     player_result = turn_results(input_coordinate, @ai_board)
     ai_result = turn_results(ai_coordinate, @player_board, false)
     turn_result = player_result + ai_result + "\n" + "\n"
-    winner == :game_continues ? turns(turn_result) : winner
+    winner(turn_result) == :game_continues ? turns(turn_result) : winner(turn_result)
+  end
+
+  def turns_print(prior_result)
+    print clear_output + print_boards + (prior_result ? prior_result : "")
+    print "On which coordinate would you like to fire?" + "\n" + "> "
   end
 
   def turn_results(coord, board, human = true)
@@ -170,13 +184,13 @@ class Game
     "\n" + "#{who} shot on #{coord} was a #{board.cells[coord].render_readable}"
   end
 
-  def winner
+  def winner(turn_result)
     if @player_cruiser.sunk && @player_sub.sunk
-      print print_winner(false)
+      print print_winner(turn_result, false)
       greeting(false)
       start(gets.chomp.downcase)
     elsif @ai_cruiser.sunk && @ai_sub.sunk
-      print print_winner
+      print print_winner(turn_result, true)
       greeting(false)
       start(gets.chomp.downcase)
     else
@@ -184,11 +198,9 @@ class Game
     end
   end
 
-  def print_winner(human = true)
-    who = human ? "You" : "I"
-    print clear_output
-    print print_boards(true)
-    "\n" + "#{who} win!" + "\n"
+  def print_winner(turn_result, human)
+    print clear_output + print_boards(true) + turn_result
+    "\n" + "#{human ? "You" : "I"} win!" + "\n"
   end
 
   def print_boards(render_both = false)
