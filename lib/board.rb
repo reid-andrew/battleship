@@ -65,7 +65,13 @@ class Board
 
   def render_top
     render_output = " "
-    @width.times { |i| render_output += " " + (i + 1).to_s }
+    @width.times do |i|
+      if i < 10
+        render_output += " " + (i + 1).to_s
+      else
+        render_output += (i + 1).to_s
+      end
+    end
     render_output += " \n"
     render_output
   end

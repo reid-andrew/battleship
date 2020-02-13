@@ -7,13 +7,13 @@ class Game
               :ai_cruiser,
               :player_board,
               :player_sub,
-              :player_cruiser,
-              :board_height,
-              :board_width
+              :player_cruiser
+
+attr_accessor :board_height, :board_width
 
   def initialize
-    @board_height = 4
-    @board_width = 4
+    @board_height = 0
+    @board_width = 0
   end
 
   def greeting(clear_screen = true)
@@ -57,8 +57,8 @@ class Game
         puts "Enter a height between 4 and 26."
         @board_height = gets.chomp.to_i
       end
-      until @board_width > 3 && @board_width < 76
-        puts "Enter a width between 4 and 75"
+      until @board_width > 3 && @board_width < 31
+        puts "Enter a width between 4 and 30"
         @board_width = gets.chomp.to_i
       end
     end
