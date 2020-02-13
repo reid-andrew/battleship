@@ -7,7 +7,14 @@ class Game
               :ai_cruiser,
               :player_board,
               :player_sub,
-              :player_cruiser
+              :player_cruiser,
+              :board_height,
+              :board_width
+
+  def initialize
+    @board_height = 4
+    @board_width = 4
+  end
 
   def greeting(clear_screen = true)
     print greeting_text(clear_screen)
@@ -36,17 +43,33 @@ class Game
   end
 
   def game_initiation
+    set_board_size
     create_game_elements
     place_ai_ships
     place_player_ships
   end
 
+  def set_board_size
+    puts "Enter 1 to assign custom board dimensions or anything else for 4 by 4."
+    option = gets.chomp
+    if option == "1"
+      until @board_height > 3 && @board_height < 27
+        puts "Enter a height between 4 and 26."
+        @board_height = gets.chomp.to_i
+      end
+      until @board_width > 3 && @board_width < 76
+        puts "Enter a width between 4 and 75"
+        @board_width = gets.chomp.to_i
+      end
+    end
+  end
+
   def create_game_elements
-    @ai_board = Board.new
+    @ai_board = Board.new(@board_height, @board_width)
     @ai_cruiser = Ship.new("AI Cruiser", 3)
     @ai_sub = Ship.new("AI Sub", 2)
 
-    @player_board = Board.new
+    @player_board = Board.new(@board_height, @board_width)
     @player_cruiser = Ship.new("Player Cruiser", 3)
     @player_sub = Ship.new("Player Sub", 2)
   end

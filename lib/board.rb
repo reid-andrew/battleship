@@ -36,8 +36,8 @@ class Board
       coord_numbers << @cells[coord].coordinate[1..-1].to_i
     end
 
-    (("A".."D").each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1) ||
-    ((1..4).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1)
+    ("A".upto("Z").to_a.first(height).each_cons(ship.length).include?(coord_letters) && coord_numbers.uniq.size == 1) ||
+    ((1..width).each_cons(ship.length).include?(coord_numbers) && coord_letters.uniq.size == 1)
   end
 
   def place(ship, coordinates)
