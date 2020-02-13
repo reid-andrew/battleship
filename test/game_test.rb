@@ -1,6 +1,5 @@
 require 'minitest/autorun'
 require 'minitest/pride'
-require 'mocha/minitest'
 require './lib/ship'
 require './lib/cell'
 require './lib/board'
@@ -31,24 +30,9 @@ class CellTest < Minitest::Test
     assert_equal repeat, @game.greeting_text(false)
   end
 
-  def test_it_starts_or_exits_game
-    @game.stubs(:game_initiation).returns("Game Started")
-
-    assert_equal "Game Started", @game.start("p")
-
-    @game.stubs(:exit).returns("Game Ended")
-
-    assert_equal "Game Ended", @game.start("q")
-  end
-
-  def test_it_accepts_valid_coordinates_from_player
-    @game.create_game_elements
-
-    assert_equal "A3", @game.player_coordinate_input("A3", true)
-    assert_equal "A3", @game.player_coordinate_input("A3", false)
-  end
-
   def test_turn_results_are_provided
+    @game.board_height = 4
+    @game.board_width = 4
     @game.create_game_elements
     @game.ai_board.cells["A1"].fire_upon
     expected1 = "\n" + "Your shot on A1 was a miss."
@@ -62,7 +46,7 @@ class CellTest < Minitest::Test
     assert_equal expected2, @game.turn_results("A2", @game.player_board, false)
   end
 
-  def test_it_can_track_hits_until_ship_is_sunk
+  def test_it_can_track_hits
     board = Board.new
     ship = Ship.new("Cruiser", 3)
     board.place(ship, ["B1", "B2", "B3"])
@@ -112,15 +96,4 @@ class CellTest < Minitest::Test
     assert_equal "A3", @game.ai_take_shot(board)
   end
 
-  def test_it_determines_no_winner
-    @game.create_game_elements
-    @game.ai_board.cells["A1"].fire_upon
-    player_results = @game.turn_results("A1", @game.ai_board, true)
-    @game.player_board.place(@game.player_sub, ["A2", "A3"])
-    @game.player_board.cells["A2"].fire_upon
-    ai_results = @game.turn_results("A2", @game.player_board, false)
-
-    assert_equal :game_continues, @game.winner(player_results)
-    assert_equal :game_continues, @game.winner(ai_results)
-  end
 end
