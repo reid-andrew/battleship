@@ -50,6 +50,8 @@ attr_accessor :board_height, :board_width
   end
 
   def set_board_size
+    @board_height = 0
+    @board_width = 0
     puts "Enter 1 to assign custom board dimensions or anything else for 4 by 4."
     option = gets.chomp
     if option == "1"
@@ -61,6 +63,9 @@ attr_accessor :board_height, :board_width
         puts "Enter a width between 4 and 30"
         @board_width = gets.chomp.to_i
       end
+    else
+      @board_height = 4
+      @board_width = 4
     end
   end
 

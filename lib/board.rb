@@ -58,7 +58,7 @@ class Board
     empties.each { |cell| col_cells << cell if cell[1..-1] == genesis[1..-1] }
     col_cells.each_cons(ship.length) { |cells| valids << cells if cells.include? genesis }
 
-    valids.empty? ? place_random(ship, length) : coordinates = valids.sample
+    valids.empty? ? place_random(ship) : coordinates = valids.sample
 
     place(ship, coordinates)
   end
